@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>选餐工具</title>
+    <style>
+        /* 设置全局样式 */
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-color: #f0f8ff; /* 背景颜色 */
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            font-size: 36px;
+            color: #333;
+        }
+
+        #result {
+            font-size: 24px;
+            margin-top: 20px;
+            padding: 10px;
+            color: #555;
+            background-color: #fff;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            opacity: 0.8;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 20px;
+            color: #fff;
+            background-color: #4caf50; /* 按钮颜色 */
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            margin: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049; /* hover 状态的按钮颜色 */
+            transform: translateY(-3px); /* hover 时按钮轻微浮动 */
+        }
+
+        button:active {
+            transform: translateY(1px); /* 点击时按钮微微下沉 */
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        #result {
+            font-size: 26px;
+            font-weight: bold;
+            background-color: #ffffff;
+            color: #333;
+            padding: 20px;
+            width: 100%;
+            max-width: 300px;
+            border-radius: 15px;
+            margin-top: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            opacity: 1;
+            transition: opacity 0.5s ease, transform 0.3s ease;
+        }
+
+        /* 为美化页面添加动画效果 */
+        #result.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #result.hide {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="wrapper">
+            <h1>今天吃什么？</h1>
+            <button id="startBtn" onclick="startSelection()">点击选餐</button>
+            <div id="result" class="hide">等待选择...</div>
+        </div>
+    </div>
+
+    <script>
+        // 店铺列表
+        const shopList = [
+            '麦当劳', '肯德基', '必胜客', '汉堡王', '星巴克', '海底捞', '呷哺呷哺',
+            '西贝莜面村', '外婆家', '黄记煌', '小肥羊', '大董烤鸭店', '全聚德',
+            '东来顺', '眉州东坡', '旺顺阁', '和合谷', '真功夫', '吉野家', '永和大王',
+            '沙县小吃', '兰州拉面', '重庆小面', '桂林米粉', '南翔小笼', '西贝筱面村',
+            '张亮麻辣烫', '杨国福麻辣烫', '火炉火'
+        ];
+
+        let intervalId;  // 轮转的定时器ID
+
+        // 开始轮转函数
+        function startSelection() {
+            const resultElement = document.getElementById('result');
+            const startButton = document.getElementById('startBtn');
+
+            // 禁用按钮防止重复点击
+            startButton.disabled = true;
+
+            resultElement.classList.remove('show');
+            resultElement.classList.add('hide');
+
+            // 轮转显示店铺
+            intervalId = setInterval(function() {
+                let randomShop = shopList[Math.floor(Math.random() * shopList.length)];
+                resultElement.innerText = '您的今日美食是：' + randomShop;
+                resultElement.classList.remove('hide');
+                resultElement.classList.add('show');
+            }, 200); // 每200毫秒随机一次
+
+            // 设定自动停止的时间，比如轮转5秒后自动停止
+            setTimeout(function() {
+                stopSelection();
+            }, 5000);  // 5秒后自动停止
+        }
+
+        // 停止轮转并确定最终结果
+        function stopSelection() {
+            const resultElement = document.getElementById('result');
+            const startButton = document.getElementById('startBtn');
+
+            // 停止定时器
+            clearInterval(intervalId);
+
+            // 重新启用“点击选餐”按钮
+            startButton.disabled = false;
+
+            // 最终选择一个店铺
+            let finalShop = shopList[Math.floor(Math.random() * shopList.length)];
+            resultElement.innerText = '您的今日美食是：' + finalShop;
+        }
+    </script>
+
+</body>
+</html>
